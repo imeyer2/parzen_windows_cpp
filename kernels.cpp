@@ -6,13 +6,13 @@
 #include <numeric>  // Include for std::inner_product
 #include <algorithm> // For std::transform
 
-#define PI = 3.14159265358979323846
-#define e = 2.71828182845904523536
-
-
 
 #ifndef KENREL_C
 #define KERNEL_C
+
+#define PI 3.14159265358979323846
+#define e 2.71828182845904523536
+
 
 /**
  * Base class for all probability
@@ -31,6 +31,11 @@ public:
 
     // Constructors & Destructor
 
+    /**
+     * Constructor
+     * 
+     * @param td std::vector<std::vector<T>>
+     */
     BasePDFGenerator(std::vector<std::vector<T>>  td) : trainingDatapoints(td) {};
     BasePDFGenerator(const BasePDFGenerator<T>& source) : trainingDatapoints(source.trainingDatapoints) {};
     ~BasePDFGenerator() {};
@@ -38,7 +43,7 @@ public:
     
 
     // Assignment operator
-    BasePDFGenerator<T>& BasePDFGenerator<T>::operator = (const BasePDFGenerator<T>& source) {
+    BasePDFGenerator<T>& operator=(const BasePDFGenerator<T>& source) {
         // Check self assignemnt
         if (this == &source){
             return *this;
@@ -61,9 +66,9 @@ public:
 
         double regularizing_coeff = 1/(std::pow(2*PI, x.size()/2));
 
-        double exponent_value = (-0.5) * std::inner_product(x, x);
+        double exponent_value = (-0.5) * std::inner_product(x.begin(), x.end(), x.begin(), 0.0);
 
-        return regularizing_coeff*std::pow(e, exponent_value)
+        return regularizing_coeff*std::pow(e, exponent_value);
 
     };
 
@@ -93,7 +98,7 @@ public:
                    [window_size](double value) { return value / window_size; });
 
 
-            ans = ans + StandardNormal(subtracted)
+            ans = ans + StandardNormal(subtracted);
         }
 
 
