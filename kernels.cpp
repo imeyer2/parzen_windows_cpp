@@ -62,13 +62,49 @@ public:
      * 
      * @param x std::vector<T>
      */
-    double StandardNormal(std::vector<T> x) {
+    double StandardNormal(const std::vector<T> x) {
 
         double regularizing_coeff = 1/(std::pow(2*PI, x.size()/2));
 
         double exponent_value = (-0.5) * std::inner_product(x.begin(), x.end(), x.begin(), 0.0);
 
         return regularizing_coeff*std::pow(e, exponent_value);
+
+    };
+
+
+    /**
+     * Helper function to determine if all 
+     * components of a std::vector are between -0.5 and 0.5
+     * 
+     * @param vec std::vector<T> 
+     */
+    bool areAllComponentsValid(const std::vector<T>& vec) {
+
+        // Check if all elements in the vector are within the range -0.5 to 0.5
+        return std::all_of(vec.begin(), vec.end(), [](T x) {
+            return x >= -0.5 && x <= 0.5; //Lambda function
+        });
+    }
+
+    /**
+     * Representing characteristics function
+     * on a hypercube of length 1 centered at the origin. 
+     * 
+     * @param x std::vector<T> 
+     * 
+     */
+    double StandardSquare(const std::vector<T>& x) {
+
+        // If x is in the hypercube centered at origin, then return 1
+        // else return 0
+        if (areAllComponentsValid(x)) {
+            return 1.0;
+        }
+        else {
+            return 0.0;
+        };
+
 
     };
 
