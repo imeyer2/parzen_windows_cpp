@@ -58,8 +58,7 @@ int main() {
     std::vector<double> input_datapoint = { 0.4332, 0.3904, 0.4479, 0.5892, 0.3689};
 
 
-    std::cout << pdf_gen.GaussianWindowPrediction(input_datapoint, 0.9) << std::endl;
-
+    std::cout << pdf_gen.WindowPrediction(input_datapoint, 0.4, BasePDFGenerator<double>::Method::StandardNormal) << std::endl;
 
     return 0;
 }

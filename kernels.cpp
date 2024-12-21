@@ -5,6 +5,7 @@
 #include <iostream>
 #include <numeric>  // Include for std::inner_product
 #include <algorithm> // For std::transform
+#include <functional>
 
 
 #ifndef KENREL_C
@@ -24,13 +25,17 @@
 template <typename T> class BasePDFGenerator{
 public:
 
-    // Required datapoints to "train" the generator
+    enum class Method {
+        StandardNormal,
+        StandardSquare
+    };
 
+
+    // Required datapoints to "train" the generator
     std::vector<std::vector<T>> trainingDatapoints;
 
 
     // Constructors & Destructor
-
     /**
      * Constructor
      * 
@@ -62,14 +67,10 @@ public:
      * 
      * @param x std::vector<T>
      */
-    double StandardNormal(const std::vector<T> x) {
-
+    double StandardNormal(const std::vector<T>& x) {
         double regularizing_coeff = 1/(std::pow(2*PI, x.size()/2));
-
         double exponent_value = (-0.5) * std::inner_product(x.begin(), x.end(), x.begin(), 0.0);
-
         return regularizing_coeff*std::pow(e, exponent_value);
-
     };
 
 
@@ -80,10 +81,9 @@ public:
      * @param vec std::vector<T> 
      */
     bool areAllComponentsValid(const std::vector<T>& vec) {
-
         // Check if all elements in the vector are within the range -0.5 to 0.5
         return std::all_of(vec.begin(), vec.end(), [](T x) {
-            return x >= -0.5 && x <= 0.5; //Lambda function
+            return x >= -0.5 && x <= 0.5; // Lambda function
         });
     }
 
@@ -104,10 +104,7 @@ public:
         else {
             return 0.0;
         };
-
-
     };
-
 
 
     /**
@@ -117,36 +114,43 @@ public:
      * @param new_datapoint
      * @param window_size
      */
-    double GaussianWindowPrediction(std::vector<T> new_datapoint, float window_size) {
+    double WindowPrediction(const std::vector<T>& new_datapoint, 
+                            float window_size, 
+                            Method method) {
+
+        // Perform binding
+        std::function<double(const std::vector<T>&)> func;
+
+        // Create lambda functions of our implementations. 
+        // The use of the **this** pointer is necessary to call the methods
+        switch (method) {
+            case Method::StandardNormal:
+                func = [this](const std::vector<T>& dp) { return this->StandardNormal(dp); };
+                break;
+            case Method::StandardSquare:
+                func = [this](const std::vector<T>& dp) { return this->StandardSquare(dp); };
+                break;
+        };
+
 
         double ans = 0.0;
-
-
         for (std::vector<T> trainingDatapoint : trainingDatapoints){
-            
             std::vector<T> subtracted;
-
             std::transform(trainingDatapoint.begin(), trainingDatapoint.end(), 
-            new_datapoint.begin(), std::back_inserter(subtracted),std::minus<T>());
-
+                            new_datapoint.begin(), std::back_inserter(subtracted),std::minus<T>());
 
             std::transform(subtracted.begin(), subtracted.end(), subtracted.begin(),
-                   [window_size](double value) { return value / window_size; });
+                            [window_size](double value) { return value / window_size; });
 
-
-            ans = ans + StandardNormal(subtracted);
+            ans += func(subtracted);
         }
 
+        ans = ans / (trainingDatapoints.size() * std::pow(window_size, new_datapoint.size()));
 
         return ans;
     };
 
 
-
-
-// GaussianWindowPrediction
-// SquareWindowPrediction
-// GeneralWindowPrediction
 
 
 };
