@@ -22,3 +22,4 @@ install(DIRECTORY include/ DESTINATION include)
 
 # Create example executable
 add_executable(example_exec src/example.cpp src/base_pdf_generator.cpp)
+
