@@ -51,7 +51,7 @@ std::vector<std::vector<double>> load_csv(const std::string& filename) {
 }
 
 int main(void) {
-    std::string filename = "data/SampleData.csv"; // Adjust the path as needed
+    std::string filename = "../src/data/SampleData.csv"; // Adjust the path as needed
     std::vector<std::vector<double>> data = load_csv(filename);
 
     BasePDFGenerator<double> pdf_gen(data);

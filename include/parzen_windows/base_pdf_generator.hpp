@@ -37,7 +37,10 @@ public:
      * @param td std::vector<std::vector<T>>
      */
     // BasePDFGenerator() : trainingDatapoints({{0}}) {}; // This consructor only exists to instantiate at the bottom of base_pdf_generator.cpp
-    BasePDFGenerator(std::vector<std::vector<T>>  td) : trainingDatapoints(td) {};
+    BasePDFGenerator(std::vector<std::vector<T>>  td) : trainingDatapoints(td) {
+        std::cout << "Constructor called with " << trainingDatapoints.size() << " training points." << std::endl; // Verify population of the `trainingDatapoints` variable
+    };
+    
     BasePDFGenerator(const BasePDFGenerator<T>& source) : trainingDatapoints(source.trainingDatapoints) {};
     ~BasePDFGenerator() {};
     
