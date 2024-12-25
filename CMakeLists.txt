@@ -11,6 +11,7 @@ include_directories(include)
 # Can manually add source files or use file(GLOB ...) to select all cpp files in src/
 add_library(parzen_windows SHARED
     src/base_pdf_generator.cpp
+    src/base_kernel_functions.cpp
 )
 
 # For an executable instead of a library, use add_executable() instead of add_library()
@@ -22,4 +23,4 @@ install(DIRECTORY include/ DESTINATION include)
 
 # Create example executable
 add_executable(example_exec src/example.cpp src/base_pdf_generator.cpp)
-
+target_link_libraries(example_exec parzen_windows)

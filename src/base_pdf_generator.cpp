@@ -36,9 +36,9 @@ BasePDFGenerator<T>& BasePDFGenerator<T>::operator=(const BasePDFGenerator<T>& s
 template <typename T>
 double BasePDFGenerator<T>::WindowPrediction(const std::vector<T>& new_datapoint, 
                         float window_size, 
-                        double(*func)(const std::vector<T>&)) {
+                        std::function<double(const std::vector<T>&)> func) {
     double ans = 0.0;
-    for (std::vector<T> trainingDatapoint : trainingDatapoints){
+    for (const std::vector<T>& trainingDatapoint : trainingDatapoints) {
         std::vector<T> subtracted;
         std::transform(trainingDatapoint.begin(), trainingDatapoint.end(), 
                         new_datapoint.begin(), std::back_inserter(subtracted),std::minus<T>());
@@ -54,4 +54,7 @@ double BasePDFGenerator<T>::WindowPrediction(const std::vector<T>& new_datapoint
     return ans;
 };
 
-template double BasePDFGenerator<double>::WindowPrediction(const std::vector<double>&, float, double (*)(const std::vector<double>&));
+// // In base_pdf_generator.cpp
+// template class BasePDFGenerator<double>;
+// // Explicitly instantiate the method if used outside the class definition scope
+template double BasePDFGenerator<double>::WindowPrediction(const std::vector<double>&, float, std::function<double(const std::vector<double>&)>);

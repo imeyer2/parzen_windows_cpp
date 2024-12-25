@@ -59,7 +59,12 @@ int main(void) {
 
     std::vector<double> input_datapoint = { 0.4332, 0.3904, 0.4479, 0.5892, 0.3689};
 
-    std::cout << pdf_gen.WindowPrediction(input_datapoint, 0.4, StaticKernelFunctions<double>::calculate_StandardNormal) << std::endl;
+    StaticKernelFunctions<double> obj;
+    std::function<double(const std::vector<double>&)> myFunc = [&obj](const std::vector<double>& v) {
+        return obj.calculate_StandardNormal(v);
+    };
+
+    std::cout << pdf_gen.WindowPrediction(input_datapoint, 0.4, myFunc) << std::endl;
 
     return 0;
 }

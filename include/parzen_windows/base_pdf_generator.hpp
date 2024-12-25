@@ -56,8 +56,7 @@ public:
      */
     double WindowPrediction(const std::vector<T>& new_datapoint, 
                             float window_size, 
-                            double(*func)(const std::vector<T>&));
-
+                            std::function<double(const std::vector<T>&)> func);
 
 };
 
