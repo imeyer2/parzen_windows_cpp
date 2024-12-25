@@ -12,7 +12,9 @@
 #include "parzen_windows/base_pdf_generator.hpp"
 #include "parzen_windows/base_kernel_functions.hpp"
 
-
+/// @brief Loads data from .csv files 
+/// @param filename 
+/// @return std::vector<std::vector<double>>
 std::vector<std::vector<double>> load_csv(const std::string& filename) {
     std::vector<std::vector<double>> data;
     std::ifstream file(filename);
