@@ -43,6 +43,10 @@ public:
      */
     static bool areAllComponentsValid(const std::vector<T>& vec);
 
+
+    double euclidean_distance(const std::vector<double>& point1, const std::vector<double>& point2);
+    
+    
     /**
      * Representing characteristics function
      * on a hypercube of length 1 centered at the origin. 
@@ -51,6 +55,9 @@ public:
      * 
      */
     static double calculate_StandardSquare(const std::vector<T>& x);
+
+
+    static double calculate_StandardHyperSphere(const std::vector<T>& x);
 
 };
 
