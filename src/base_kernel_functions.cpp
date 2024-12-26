@@ -22,20 +22,6 @@ bool StaticKernelFunctions<T>::areAllComponentsValid(const std::vector<T>& vec) 
 
 
 /**
- * Helper function to determine if all 
- * components of a std::vector are between -0.5 and 0.5
- * 
- * @param vec std::vector<T> 
- */
-template <typename T>
-bool StaticKernelFunctions<T>::testAllComponenets(const std::vector<T>& vec, double thresh) {
-    // Check if all elements in the vector are within the range -0.5 to 0.5
-    return std::all_of(vec.begin(), vec.end(), [](T x) {
-        return x >= -1* thresh && x <= thresh; // Lambda function
-    });
-};
-
-/**
  * Representing characteristics function
  * on a hypercube of length 1 centered at the origin. 
  * 
@@ -74,7 +60,13 @@ double StaticKernelFunctions<T>::calculate_StandardNormal(const std::vector<T>& 
 
 
 
-// Function to calculate Euclidean distance between two points
+/**
+ * Calculate the euclidean distance between two vectors.
+ * 
+ * @param x std::vector<T>
+ * 
+ * @return double
+ */
 template <typename T>
 double StaticKernelFunctions<T>::euclidean_distance(const std::vector<double>& point1, const std::vector<double>& point2) {
     if (point1.size() != point2.size()) {
@@ -90,17 +82,30 @@ double StaticKernelFunctions<T>::euclidean_distance(const std::vector<double>& p
 }
 
 
+/**
+ * Characteristic function for a hypersphere with volume 1 in high dimensional space.
+ * WARNING: The radius of a hyperspehere with volume 1 decreases drastically as dimensionality 
+ * increases. Use caution when using this method in high dimensions.
+ * 
+ * @param x std::vector<T>
+ */
 template <typename T>
 double StaticKernelFunctions<T>::calculate_StandardHyperSphere(const std::vector<T>& x) {
 
-
     // Find radius `r` such that volume of hypersphere is 1. r = (1/v_n)^(1/n)
+    double numerator = std::pow(PI, double (x.size()/2)); // Need to cast as double
+    double denominator = std::tgamma(double (x.size()/2) + 1); // Need to cast as double
+    double volume_of_ndim_unit_ball = numerator/denominator;
+    double radius = std::pow(1/volume_of_ndim_unit_ball, double (1/x.size()));
 
-    double volume_of_ndim_unit_ball;
-    double radius = std::pow(1/volume_of_ndim_unit_ball, 1/x.size())
 
-    if std::
-
+    // Return 1 if distance between input vector and origin is within the
+    // hyperspehere (distance less than or equal to the radius)
+    if (euclidean_distance(x, 0) <= radius) {
+        return 1;
+    } else {
+        return 0;
+    }
 
 };
 

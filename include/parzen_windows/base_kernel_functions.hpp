@@ -44,6 +44,14 @@ public:
     static bool areAllComponentsValid(const std::vector<T>& vec);
 
 
+
+    /**
+     * Calculate the euclidean distance between two vectors.
+     * 
+     * @param x std::vector<T>
+     * 
+     * @return double
+     */
     double euclidean_distance(const std::vector<double>& point1, const std::vector<double>& point2);
     
     
