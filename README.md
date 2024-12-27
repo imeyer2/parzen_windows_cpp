@@ -18,3 +18,4 @@ Hyperparameters
 Future ideas:
 - Incorporation of real-time visualization
 - More kernel functions
+- Unit tests
