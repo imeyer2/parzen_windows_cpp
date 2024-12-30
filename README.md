@@ -16,6 +16,6 @@ Hyperparameters
 - $\phi$ : The actual kernel function. The method requires that \phi$ is a nonnegative function with $\int_X \phi \, dx = 1$. The typical choices are the `calculate_StandardSquare` or `calculate_StandardNormal` methods within the `StaticKernelFunctions` class.
 
 Future ideas:
-- Incorporation of real-time visualization
+- Incorporation of real-time visualization (https://alandefreitas.github.io/matplotplusplus/integration/cmake/embed-as-subdirectory/)
 - More kernel functions
 - Unit tests

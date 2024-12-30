@@ -6,17 +6,21 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 
-include(FetchContent)
-FetchContent_Declare(
-  googletest
-  URL https://github.com/google/googletest/archive/03597a01ee50ed33e9dfd640b249b4be3799d395.zip
-)
-
 # Add header files
 include_directories(include)
 
+# Find Google Test
+find_package(GTest REQUIRED)
+
+# Include the GTest directories
+include_directories(${GTest_INCLUDE_DIRS})
+add_subdirectory(matplotplusplus)
+
 # Create the library
-add_library(parzen_windows SHARED src/*.cpp)
+add_library(parzen_windows SHARED src/base_pdf_generator.cpp src/base_kernel_functions.cpp)
+
+# Enable testing
+enable_testing()
 
 # Create the test executable
 add_executable(parzen_windows_tests tests/base_pdf_generator_test.cpp)
@@ -34,3 +38,7 @@ install(DIRECTORY include/ DESTINATION include)
 # Create example executable (optional)
 add_executable(example_exec src/example.cpp) 
 target_link_libraries(example_exec parzen_windows)
+target_link_libraries(example_exec PUBLIC matplot)
+
+
+# https://alandefreitas.github.io/matplotplusplus/integration/cmake/embed-as-subdirectory/
