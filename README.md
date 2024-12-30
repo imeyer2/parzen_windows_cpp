@@ -19,3 +19,4 @@ Future ideas:
 - Incorporation of real-time visualization (https://alandefreitas.github.io/matplotplusplus/integration/cmake/embed-as-subdirectory/)
 - More kernel functions
 - Unit tests
+- Incorporate the csv reader function into the `BasePDFGenerator` class
