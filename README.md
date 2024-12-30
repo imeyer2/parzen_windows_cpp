@@ -8,12 +8,12 @@ In other words, given observations of a random variable, we can reconstruct the 
 
 $\hat{p}(x) = \frac{1}{N} \cdot \frac{1}{h^l} \sum_{i=1} ^N \phi(\frac{x_i - x}{h})$
 
-where $\phi$ is a nonnegative function with $\int_X \phi \, dx = 1$ where $X$ is the entire space (typically of the form $\mathbb{R}^l$).
+where $\phi$ is a nonnegative function with $\int_X  \phi \, dx = 1$ where $X$ is the entire space (typically of the form $\mathbb{R}^l$).
 
 Hyperparameters
 - $h$ : The window size. Smaller values of $h$ (near 0, around 0.1, 0.2) will yield spikier, more jagged estimates for the underlying probability density function, larger values (0.8,0.9,1) will smooth this out, but may lose some more granular details.
 
-- $\phi$ : The actual kernel function. The method requires that \phi$ is a nonnegative function with $\int_X \phi \, dx = 1$. The typical choices are the `calculate_StandardSquare` or `calculate_StandardNormal` methods within the `StaticKernelFunctions` class.
+- $\phi$ : The actual kernel function. The method requires that $\phi$ is a nonnegative function with $\int_X \phi \, dx = 1$. The typical choices are the `calculate_StandardSquare` or `calculate_StandardNormal` methods within the `StaticKernelFunctions` class.
 
 Future ideas:
 - Incorporation of real-time visualization (https://alandefreitas.github.io/matplotplusplus/integration/cmake/embed-as-subdirectory/)
