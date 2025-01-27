@@ -37,6 +37,7 @@ template <typename T>
 double BasePDFGenerator<T>::WindowPrediction(const std::vector<T>& new_datapoint, 
                         float window_size, 
                         std::function<double(const std::vector<T>&)> func) {
+
     double ans = 0.0;
     for (const std::vector<T>& trainingDatapoint : trainingDatapoints) {
         std::vector<T> subtracted;
@@ -45,6 +46,7 @@ double BasePDFGenerator<T>::WindowPrediction(const std::vector<T>& new_datapoint
 
         std::transform(subtracted.begin(), subtracted.end(), subtracted.begin(),
                         [window_size](double value) { return value / window_size; });
+
 
         ans += func(subtracted);
     }

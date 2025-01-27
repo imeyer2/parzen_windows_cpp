@@ -20,6 +20,7 @@ bool StaticKernelFunctions<T>::areAllComponentsValid(const std::vector<T>& vec) 
     });
 };
 
+
 /**
  * Representing characteristics function
  * on a hypercube of length 1 centered at the origin. 
@@ -54,6 +55,59 @@ double StaticKernelFunctions<T>::calculate_StandardNormal(const std::vector<T>& 
         double exponent_value = (-0.5) * std::inner_product(x.begin(), x.end(), x.begin(), 0.0);
         return regularizing_coeff*std::pow(e, exponent_value);
     };
+
+
+
+
+
+/**
+ * Calculate the euclidean distance between two vectors.
+ * 
+ * @param x std::vector<T>
+ * 
+ * @return double
+ */
+template <typename T>
+double StaticKernelFunctions<T>::euclidean_distance(const std::vector<double>& point1, const std::vector<double>& point2) {
+    if (point1.size() != point2.size()) {
+        throw std::invalid_argument("Points must have the same number of dimensions.");
+    }
+
+    double distance_squared = 0.0;
+    for (int i = 0; i < point1.size(); i++) {
+        distance_squared += std::pow(point1[i] - point2[i], 2);
+    }
+
+    return std::sqrt(distance_squared);
+}
+
+
+/**
+ * Characteristic function for a hypersphere with volume 1 in high dimensional space.
+ * WARNING: The radius of a hyperspehere with volume 1 decreases drastically as dimensionality 
+ * increases. Use caution when using this method in high dimensions.
+ * 
+ * @param x std::vector<T>
+ */
+template <typename T>
+double StaticKernelFunctions<T>::calculate_StandardHyperSphere(const std::vector<T>& x) {
+
+    // Find radius `r` such that volume of hypersphere is 1. r = (1/v_n)^(1/n)
+    double numerator = std::pow(PI, double (x.size()/2)); // Need to cast as double
+    double denominator = std::tgamma(double (x.size()/2) + 1); // Need to cast as double
+    double volume_of_ndim_unit_ball = numerator/denominator;
+    double radius = std::pow(1/volume_of_ndim_unit_ball, double (1/x.size()));
+
+
+    // Return 1 if distance between input vector and origin is within the
+    // hyperspehere (distance less than or equal to the radius)
+    if (euclidean_distance(x, 0) <= radius) {
+        return 1;
+    } else {
+        return 0;
+    }
+
+};
 
 
 template double StaticKernelFunctions<double>::calculate_StandardNormal(const std::vector<double>& x);
