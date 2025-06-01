@@ -1,45 +1,27 @@
-cmake_minimum_required(VERSION 3.10)
-project(parzen_windows VERSION 1.0)
+cmake_minimum_required(VERSION 3.20)
+project(parzen_windows_cpp LANGUAGES CXX)
 
-# Specify C++ Standard
 set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED True)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
+# -O3 because we are looking for the fastest code
+# -march=native because we want to use the best optimizations for the current architecture
+add_compile_options(-O3 -march=native -pipe) 
 
-# Add header files
-include_directories(include)
-include_directories(/opt/homebrew/include/gtest)
+# include the third_party directory which has 3rd party libraries
+include_directories(include third_party)
 
-# Find Google Test (corrected path)
-find_package(GTest REQUIRED PATHS /opt/homebrew/include/gtest)  # Adjust the path as needed
-
-# Create the library
-add_library(parzen_windows SHARED src/base_pdf_generator.cpp src/base_kernel_functions.cpp)
-
-# Enable testing
-enable_testing()
-
-# Create the test executable
-add_executable(parzen_windows_tests tests/base_pdf_generator_test.cpp)
-target_link_libraries(
-    parzen_windows_tests
-    GTest::gtest_main
+# tell CMake where to find the source files
+add_executable(parzen_server
+    src/server.cpp
+    src/csv_reader.cpp
+    src/kde.cpp
 )
-# Link the test executable with the library and Google Test
-target_link_libraries(parzen_windows_tests parzen_windows ${GTest_LIBRARIES})
 
-# Specify installation rules
-install(TARGETS parzen_windows DESTINATION lib)
-install(DIRECTORY include/ DESTINATION include)
+find_package(Threads REQUIRED)
 
-
-# Create example executable (optional)
-add_executable(example_exec src/example.cpp) 
-target_link_libraries(example_exec parzen_windows)
-
-
-# Create visualization example
-add_executable(example_exec2 src/example2.cpp) 
-target_link_libraries(example_exec2 parzen_windows)
-
-# https://alandefreitas.github.io/matplotplusplus/integration/cmake/embed-as-subdirectory/
+# target_link_libraries is used here because
+# we need to link the threads library to our executable
+# we use PRIVATE to avoid exposing this dependency to other targets
+target_link_libraries(parzen_server PRIVATE Threads::Threads)
